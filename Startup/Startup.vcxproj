@@ -138,12 +138,14 @@
     <ClCompile Include="AppControls.cpp" />
     <ClCompile Include="CmdLine.cpp" />
     <ClCompile Include="CustomMessages.cpp" />
+    <ClCompile Include="LoaderLib.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AppControls.hpp" />
     <ClInclude Include="CmdLine.hpp" />
     <ClInclude Include="CustomMessages.hpp" />
+    <ClInclude Include="LoaderLib.hpp" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
