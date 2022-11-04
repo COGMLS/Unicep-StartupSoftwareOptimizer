@@ -26,30 +26,58 @@
 
 int main(int argc, const char* argv[])
 {
-    // Try to set the portuguese language on UTF-8 console.
-    // Check the notes about the possibilities.
-    try
+    short lang = chkLangValue(argc, argv);
+
+    if (lang == 0 || lang == -2)
     {
-        // Set the application language to pt-BR on UTF-8 encoding.
-        //std::locale appLang("pt_BR", std::locale::all);
-        //std::locale::global(appLang);
+        // Try to set the english language on UTF-8 console.
+        try
+        {
+            std::locale appLang("en_US.utf8", std::locale::all);
+            std::locale::global(appLang);
+        }
+        catch (const std::exception& e)
+        {
+            // Use colorized strings on console with ASCII encoding:
+            std::cout << msg::writeError("Fail to set the app location.") << std::endl;
 
-        //gcc bug: it fails if try to compile in pt_BR.uft8, but not in en_US.utf8
-        std::locale::global(std::locale("en_US.utf8"));
+            std::cerr << msg::writeError(e.what()) << '\n';
 
-        
+            std::cout << "\nPress Enter to continue...";
+            #pragma warning (suppress : 6031)
+            std::getchar();
+
+            return 1;   // Set location fail.
+        }
     }
-    catch (const std::exception& e)
+    else if (lang == 1)
     {
-        // Use colorized strings on console with ASCII encoding:
-        std::cout << msg::writeError("Fail to set the app location.") << std::endl;
+        // Try to set the portuguese language on UTF-8 console.
+        try
+        {
+            std::locale appLang("pt_BR.uft8", std::locale::all);
+            std::locale::global(appLang);
+        }
+        catch (const std::exception& e)
+        {
+            // Use colorized strings on console with ASCII encoding:
+            std::cout << msg::writeError("Fail to set the app location.") << std::endl;
 
-        std::cerr << msg::writeError(e.what()) << '\n';
+            std::cerr << msg::writeError(e.what()) << '\n';
 
-        std::cout << "\nPress Enter to continue...";
-        std::getchar();
+            std::cout << "\nPress Enter to continue...";
+            #pragma warning (suppress : 6031)
+            std::getchar();
 
-        return 1;   // Set location fail.
+            return 1;   // Set location fail.
+        }
     }
+    else
+    {
+        return 2;   // Fail to define the program language!
+    }
+
+
+
     return 0;
 }
