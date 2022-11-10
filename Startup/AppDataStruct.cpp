@@ -4,7 +4,7 @@ initData::initData()
 {
 	this->showName = "Default string";
 	this->priority = Priority_t::NORMAL;
-	this->delay = 0;
+	this->delay = std::chrono::high_resolution_clock::duration(0);
 }
 
 initData::~initData()
@@ -24,7 +24,7 @@ Priority_t initData::getPriority()
 
 long initData::getDelay()
 {
-	return this->delay;
+	return this->delay.count();
 }
 
 initApp::initApp(std::string showName, std::filesystem::path basePath, std::string execName, std::string args, Priority_t priority, long delay)
@@ -34,7 +34,7 @@ initApp::initApp(std::string showName, std::filesystem::path basePath, std::stri
 	this->execName = execName;
 	this->args = args;
 	this->priority = priority;
-	this->delay = delay;
+	this->delay = std::chrono::high_resolution_clock::duration(delay);
 }
 
 initApp::~initApp()
@@ -44,7 +44,7 @@ initApp::~initApp()
 
 long long initApp::getTime2Open()
 {
-	return this->time2Open;
+	return (this->end - this->start).count();
 }
 
 std::filesystem::path initApp::getBasePath()
@@ -67,7 +67,7 @@ initProtocol::initProtocol(std::string showName, std::string protocolName, Prior
 	this->showName = showName;
 	this->protocolName = protocolName;
 	this->priority = priority;
-	this->delay = delay;
+	this->delay = std::chrono::high_resolution_clock::duration(delay);
 }
 
 initProtocol::~initProtocol()
@@ -82,5 +82,5 @@ std::string initProtocol::getProtocolName()
 
 long long initProtocol::getTime2Open()
 {
-	return this->time2Open;
+	return (this->end - this->start).count();
 }

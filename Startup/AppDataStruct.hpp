@@ -20,7 +20,8 @@ class initData
 	protected:
 		std::string showName;
 		Priority_t priority;
-		long delay;
+		std::chrono::high_resolution_clock::duration delay;
+		std::chrono::high_resolution_clock::time_point start, end;
 	public:
 		initData();
 		~initData();
@@ -35,7 +36,7 @@ class initApp: public initData
 		std::filesystem::path basePath;
 		std::string execName;
 		std::string args;
-		long long time2Open;
+		std::chrono::high_resolution_clock::time_point time2Open;
 	public:
 		initApp(std::string showName, std::filesystem::path basePath, std::string execName, std::string args, Priority_t priority, long delay);
 		~initApp();
@@ -43,18 +44,20 @@ class initApp: public initData
 		std::filesystem::path getBasePath();
 		std::string getExecName();
 		std::string getArgs();
+		virtual void startup();
 };
 
 class initProtocol: public initData
 {
 	private:
 		std::string protocolName;
-		long long time2Open;
+		std::chrono::high_resolution_clock::time_point time2Open;
 	public:
 		initProtocol(std::string showName, std::string protocolName, Priority_t priority, long delay);
 		~initProtocol();
 		std::string getProtocolName();
 		long long getTime2Open();
+		virtual void startup();
 };
 
 #endif // !APPDATASTRUCT_HPP
