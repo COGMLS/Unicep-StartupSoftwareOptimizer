@@ -9,6 +9,7 @@
 #include <string>
 #include <fstream>
 #include "AppDataStruct.hpp"
+#include "AuxLib.hpp"
 
 class Profile
 {
@@ -17,7 +18,6 @@ class Profile
 		std::string description;
 		std::tm* calendarData = nullptr;
 		std::filesystem::path profilePath;
-		//std::filesystem::recursive_directory_iterator* internalConfigs = nullptr;
 		std::priority_queue<initApp>* appQueue = nullptr;
 		std::priority_queue<initProtocol>* protocolQueue = nullptr;
 	public:
@@ -33,11 +33,10 @@ class Profile
 		size_t protocolQueueSize();
 };
 
-//std::filesystem::recursive_directory_iterator internalConfigDirs(std::filesystem::path basePath);
-//int loadConfig(std::filesystem::path configBasePath, std::time_t currentTime, std::priority_queue<initApp> &appQueue, std::priority_queue<initProtocol> &protocolQueue);
 initApp* loadAppConfig(std::filesystem::path initDataCfgFile);
 initProtocol* loadProtocolConfig(std::filesystem::path initDataCfgFile);
 bool isCfgToken(std::string& configStr, const char* configToken);
 void getTimeHistory(std::string& strData, std::vector<long long>& timeHistory, int& errAcq);
+int chkProfile(std::string& loadProfile, std::filesystem::path& profileCfgPath);
 
 #endif // !LOADER_HPP

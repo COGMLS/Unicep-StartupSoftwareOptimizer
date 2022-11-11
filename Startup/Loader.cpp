@@ -474,3 +474,42 @@ void getTimeHistory(std::string& strData, std::vector<long long>& timeHistory, i
 		i++;
 	}
 }
+
+int chkProfile(std::string& loadProfile, std::filesystem::path& profileCfgPath)
+{
+	std::string appDataPath;
+
+	if (getEnv(appDataPath, "AppData") == 0)
+	{
+		std::filesystem::path loadProfilePath(appDataPath);
+
+		try
+		{
+			if (std::filesystem::exists(loadProfilePath))
+			{
+				std::string profileConfigFile = appDataPath + "\\profile.cfg";
+
+				std::ofstream fs(profileConfigFile);
+
+				if (fs.is_open())
+				{
+					fs.close();
+
+					profileCfgPath = profileConfigFile;
+
+					return 0;
+				}
+				
+				return 4;
+			}
+
+			return 3;
+		}
+		catch (const std::exception&)
+		{
+			return 2;
+		}
+	}
+
+	return 1;
+}

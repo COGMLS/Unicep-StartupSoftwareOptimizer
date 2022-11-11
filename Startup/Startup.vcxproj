@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="AppControls.cpp" />
     <ClCompile Include="AppDataStruct.cpp" />
+    <ClCompile Include="AuxLib.cpp" />
     <ClCompile Include="CmdLine.cpp" />
     <ClCompile Include="CustomMessages.cpp" />
     <ClCompile Include="Loader.cpp" />
@@ -149,6 +150,7 @@
   <ItemGroup>
     <ClInclude Include="AppControls.hpp" />
     <ClInclude Include="AppDataStruct.hpp" />
+    <ClInclude Include="AuxLib.hpp" />
     <ClInclude Include="CmdLine.hpp" />
     <ClInclude Include="CustomMessages.hpp" />
     <ClInclude Include="Loader.hpp" />
