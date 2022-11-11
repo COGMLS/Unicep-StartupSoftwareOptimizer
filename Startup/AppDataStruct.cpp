@@ -1,5 +1,7 @@
 #include "AppDataStruct.hpp"
 
+const std::string BASE_APPDATA_DIR = "StartupOptimizer";
+
 initData::initData()
 {
 	this->showName = "Default string";

@@ -8,6 +8,8 @@
 #include <chrono>
 #include <filesystem>
 
+extern const std::string BASE_APPDATA_DIR;
+
 enum Priority_t
 {
 	LOW,
