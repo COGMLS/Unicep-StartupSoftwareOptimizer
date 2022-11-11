@@ -37,6 +37,7 @@ class Profile
 //int loadConfig(std::filesystem::path configBasePath, std::time_t currentTime, std::priority_queue<initApp> &appQueue, std::priority_queue<initProtocol> &protocolQueue);
 initApp* loadAppConfig(std::filesystem::path initDataCfgFile);
 initProtocol* loadProtocolConfig(std::filesystem::path initDataCfgFile);
-
+bool isCfgToken(std::string& configStr, const char* configToken);
+void getTimeHistory(std::string& strData, std::vector<long long>& timeHistory, int& errAcq);
 
 #endif // !LOADER_HPP
