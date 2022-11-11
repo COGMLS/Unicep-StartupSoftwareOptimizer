@@ -22,6 +22,7 @@
 // Custom Headers:
 #include "CmdLine.hpp"
 #include "CustomMessages.hpp"
+#include "Loader.hpp"
 
 
 int main(int argc, const char* argv[])
@@ -77,7 +78,14 @@ int main(int argc, const char* argv[])
         return 2;   // Fail to define the program language!
     }
 
+    msg::showPresentation("Startup Software Optimizer");
 
+    std::string loadPath;
+
+    if (chkLoadPathValue(argc, argv, loadPath)) // Change function to get the profile name directly
+    {
+        // Test loadPath
+    }
 
     return 0;
 }
