@@ -78,6 +78,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -94,6 +95,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -110,6 +112,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,6 +129,7 @@
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <CompileAs>CompileAsCpp</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -139,6 +143,7 @@
     <ClCompile Include="AppDataStruct.cpp" />
     <ClCompile Include="CmdLine.cpp" />
     <ClCompile Include="CustomMessages.cpp" />
+    <ClCompile Include="Loader.cpp" />
     <ClCompile Include="LoaderLib.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -147,6 +152,7 @@
     <ClInclude Include="AppDataStruct.hpp" />
     <ClInclude Include="CmdLine.hpp" />
     <ClInclude Include="CustomMessages.hpp" />
+    <ClInclude Include="Loader.hpp" />
     <ClInclude Include="LoaderLib.hpp" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
