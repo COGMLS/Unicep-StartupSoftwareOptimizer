@@ -27,7 +27,7 @@ long initData::getDelay()
 	return this->delay.count();
 }
 
-initApp::initApp(std::string showName, std::filesystem::path basePath, std::string execName, std::string args, Priority_t priority, long delay)
+initApp::initApp(std::string showName, std::filesystem::path basePath, std::string execName, std::string args, Priority_t priority, long delay, std::vector<long long> time2OpenHistory)
 {
 	this->showName = showName;
 	this->basePath = basePath;
@@ -35,6 +35,7 @@ initApp::initApp(std::string showName, std::filesystem::path basePath, std::stri
 	this->args = args;
 	this->priority = priority;
 	this->delay = std::chrono::high_resolution_clock::duration(delay);
+	this->time2OpenHistory = time2OpenHistory;
 }
 
 initApp::~initApp()
@@ -62,12 +63,13 @@ std::string initApp::getArgs()
 	return this->args;
 }
 
-initProtocol::initProtocol(std::string showName, std::string protocolName, Priority_t priority, long delay)
+initProtocol::initProtocol(std::string showName, std::string protocolName, Priority_t priority, long delay, std::vector<long long> time2OpenHistory)
 {
 	this->showName = showName;
 	this->protocolName = protocolName;
 	this->priority = priority;
 	this->delay = std::chrono::high_resolution_clock::duration(delay);
+	this->time2OpenHistory = time2OpenHistory;
 }
 
 initProtocol::~initProtocol()

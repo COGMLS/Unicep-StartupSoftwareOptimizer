@@ -4,6 +4,7 @@
 #define APPDATASTRUCT_HPP
 
 #include <string>
+#include <vector>
 #include <chrono>
 #include <filesystem>
 
@@ -37,8 +38,9 @@ class initApp: public initData
 		std::string execName;
 		std::string args;
 		std::chrono::high_resolution_clock::time_point time2Open;
+		std::vector<long long>time2OpenHistory;
 	public:
-		initApp(std::string showName, std::filesystem::path basePath, std::string execName, std::string args, Priority_t priority, long delay);
+		initApp(std::string showName, std::filesystem::path basePath, std::string execName, std::string args, Priority_t priority, long delay, std::vector<long long>time2OpenHistory);
 		~initApp();
 		long long getTime2Open();
 		std::filesystem::path getBasePath();
@@ -52,8 +54,9 @@ class initProtocol: public initData
 	private:
 		std::string protocolName;
 		std::chrono::high_resolution_clock::time_point time2Open;
+		std::vector<long long>time2OpenHistory;
 	public:
-		initProtocol(std::string showName, std::string protocolName, Priority_t priority, long delay);
+		initProtocol(std::string showName, std::string protocolName, Priority_t priority, long delay, std::vector<long long>time2OpenHistory);
 		~initProtocol();
 		std::string getProtocolName();
 		long long getTime2Open();
