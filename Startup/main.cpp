@@ -55,7 +55,7 @@ int main(int argc, const char* argv[])
         // Try to set the portuguese language on UTF-8 console.
         try
         {
-            std::locale appLang("pt_BR.uft8", std::locale::all);
+            std::locale appLang("pt_BR", std::locale::all);
             std::locale::global(appLang);
         }
         catch (const std::exception& e)
