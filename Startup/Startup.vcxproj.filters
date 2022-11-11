@@ -27,7 +27,13 @@
     <ClCompile Include="CmdLine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LoaderLib.cpp">
+    <ClCompile Include="AppDataStruct.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Loader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AuxLib.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -44,7 +50,13 @@
     <ClInclude Include="CmdLine.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LoaderLib.hpp">
+    <ClInclude Include="AppDataStruct.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Loader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AuxLib.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
