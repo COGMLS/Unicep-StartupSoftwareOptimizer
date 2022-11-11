@@ -303,7 +303,7 @@ initProtocol* loadProtocolConfig(std::filesystem::path initDataCfgFile)
 	initProtocol* initTemp = nullptr;
 
 	int errAcq = 0;
-	int errAcqHIstory = 0;
+	int errAcqTimeHistory = 0;
 
 	try
 	{
@@ -384,16 +384,36 @@ initProtocol* loadProtocolConfig(std::filesystem::path initDataCfgFile)
 			}
 
 			// Protocol name
+			if (i == 4)
+			{
+				if (isCfgToken(buffer, "PROTOCOL"))
+				{
+					protocolName = buffer;
+				}
+			}
+
+			// Time to open
+			if (i == 5)
+			{
+				if (isCfgToken(buffer, "TIME_HISTORY"))
+				{
+					getTimeHistory(buffer, time2OpenHistory, errAcqTimeHistory);
+				}
+				else
+				{
+					errAcq += 2 ^ i;
+				}
+			}
 
 			i++;
 		}
 
-		if (errAcq > 0 || errAcqHIstory > 0)
+		config.close();
+
+		if (errAcq > 0 || errAcqTimeHistory > 0)
 		{
 			return nullptr;
 		}
-
-		config.close();
 
 		initTemp = new initProtocol(name, protocolName, priority, delay, time2OpenHistory);
 
