@@ -27,9 +27,6 @@
     <ClCompile Include="CmdLine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LoaderLib.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="AppDataStruct.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -48,9 +45,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CmdLine.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LoaderLib.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="AppDataStruct.hpp">
