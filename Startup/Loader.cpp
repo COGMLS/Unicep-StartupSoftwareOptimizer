@@ -481,35 +481,51 @@ int chkProfile(std::string& loadProfile, std::filesystem::path& profileCfgPath)
 
 	if (getEnv(appDataPath, "AppData") == 0)
 	{
-		std::filesystem::path loadProfilePath(appDataPath);
-
 		try
 		{
+			std::filesystem::path loadProfilePath(appDataPath + "\\" + BASE_APPDATA_DIR);
+
+			// Check for base appdata configs folder
 			if (std::filesystem::exists(loadProfilePath))
 			{
-				std::string profileConfigFile = appDataPath + "\\profile.cfg";
+				loadProfilePath += "\\" + loadProfile;
 
-				std::ofstream fs(profileConfigFile);
-
-				if (fs.is_open())
+				// If the profile folder exist
+				if (std::filesystem::exists(loadProfilePath))
 				{
-					fs.close();
+					std::string profileConfigFile = appDataPath + "\\" + "profile.cfg";
+			
+					// Check if the profile config file exist
+					if (std::filesystem::exists(loadProfilePath))
+					{
+						std::ofstream fs(profileConfigFile);
 
-					profileCfgPath = profileConfigFile;
+						// Try to reach the file
+						if (fs.is_open())
+						{
+							fs.close();
 
-					return 0;
-				}
+							profileCfgPath = profileConfigFile;
+
+							return 0;	// Configuration file can be opened
+						}
 				
-				return 4;
+						return 6;	// Configuration file can't be opened
+					}
+
+					return 5;	// Fail to get the profile configuration file
+				}
+
+				return 4;	// Fail to get the profile folder
 			}
 
-			return 3;
+			return 3;	// Fail to check the base appdata configs
 		}
 		catch (const std::exception&)
 		{
-			return 2;
+			return 2;	// Catch return
 		}
 	}
 
-	return 1;
+	return 1;	// Fail to get the environment variable
 }
