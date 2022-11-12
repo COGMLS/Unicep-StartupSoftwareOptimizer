@@ -26,7 +26,7 @@ Priority_t initData::getPriority()
 
 long initData::getDelay()
 {
-	return this->delay.count();
+	return static_cast<long>(this->delay.count());
 }
 
 initApp::initApp(std::string showName, std::filesystem::path basePath, std::string execName, std::string args, Priority_t priority, long delay, std::vector<long long> time2OpenHistory)
