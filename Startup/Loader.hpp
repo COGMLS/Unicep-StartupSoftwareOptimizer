@@ -35,7 +35,6 @@ class Profile
 
 initApp* loadAppConfig(std::filesystem::path initDataCfgFile);
 initProtocol* loadProtocolConfig(std::filesystem::path initDataCfgFile);
-bool isCfgToken(std::string& configStr, const char* configToken);
 void getTimeHistory(std::string& strData, std::vector<long long>& timeHistory, int& errAcq);
 int chkProfile(std::string& loadProfile, std::filesystem::path& profileCfgPath);
 

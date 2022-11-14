@@ -10,22 +10,24 @@ Profile::Profile(std::filesystem::path profileCfgFile)
 	std::string temp;
 
 	// Check and load the profile base config
-	int i = 0;
-	while (std::getline(profileConfig, temp))
+	if (readConfig(profileConfig, "PROFILE_NAME=", temp) == 0)
 	{
-		if (i == 1)
-		{
-			this->name = temp;
-			temp.clear();
-		}
+		this->name = temp;
+		temp.clear();
+	}
+	else
+	{
+		this->name = "FAIL TO LOAD PROFILE_NAME";
+	}
 
-		if (i == 2)
-		{
-			this->description = temp;
-			temp.clear();
-		}
-
-		i++;
+	if (readConfig(profileConfig, "PROFILE_DESCRIPTION=", temp) == 0)
+	{
+		this->description = temp;
+		temp.clear();
+	}
+	else
+	{
+		this->description = "FAIL TO LOAD PROFILE_DESCRIPTION";
 	}
 
 	// Close profile config file
@@ -36,16 +38,14 @@ Profile::Profile(std::filesystem::path profileCfgFile)
 	this->calendarData = std::gmtime(&time);
 
 	// Convert the wday to string and use it to define the final path
-	std::filesystem::path p1 = "\\" + std::to_string(this->calendarData->tm_wday);
-	std::filesystem::path p2 = this->profilePath;
-	p2 += p1;
+	std::filesystem::path p1 = this->profilePath.generic_string() + "\\" + std::to_string(this->calendarData->tm_wday);
 
 	// Initialyze the priority queues
 	this->appQueue = new std::priority_queue<initApp>;
 	this->protocolQueue = new std::priority_queue<initProtocol>;
 
 	// Get recursively the directories and files
-	std::filesystem::recursive_directory_iterator startCfgs(p2);
+	std::filesystem::recursive_directory_iterator startCfgs(p1);
 
 	// Create temporary pointer for receave the apps and protocols initialyzation data
 	initApp* appTemp = nullptr;
@@ -164,121 +164,96 @@ initApp* loadAppConfig(std::filesystem::path initDataCfgFile)
 		std::string args = "";
 		std::vector<long long> time2OpenHistory;
 
-		int i = 0;
-		while (std::getline(config, buffer))
+		// Show name
+		if (readConfig(config, "NAME=", buffer) == 0)
 		{
-			// Show name
-			if (i == 1)
-			{
-				if (isCfgToken(buffer, "NAME"))
-				{
-					name = buffer;
-				}
-				else
-				{
-					errAcq += 2 ^ i;
-				}
-			}
+			name = buffer;
+		}
+		else
+		{
+			errAcq += 2 ^ 0;
+		}
 
-			// Priority
-			if (i == 2)
+		// Priority
+		if (readConfig(config, "PRIORITY=", buffer) == 0)
+		{
+			if (std::strcmp(buffer.c_str(), "LOW") == 0)
 			{
-				if (isCfgToken(buffer, "PRIORITY"))
-				{
-					if (std::strcmp(buffer.c_str(), "LOW") == 0)
-					{
-						priority = Priority_t::LOW;
-					}
-					else if (std::strcmp(buffer.c_str(), "NORMAL") == 0)
-					{
-						priority = Priority_t::NORMAL;
-					}
-					else if (std::strcmp(buffer.c_str(), "HIGH") == 0)
-					{
-						priority = Priority_t::HIGH;
-					}
-					else
-					{
-						priority = Priority_t::NORMAL;
-					}
-				}
-				else
-				{
-					errAcq += 2 ^ i;
-				}
+				priority = Priority_t::LOW;
 			}
+			else if (std::strcmp(buffer.c_str(), "NORMAL") == 0)
+			{
+				priority = Priority_t::NORMAL;
+			}
+			else if (std::strcmp(buffer.c_str(), "HIGH") == 0)
+			{
+				priority = Priority_t::HIGH;
+			}
+			else
+			{
+				priority = Priority_t::NORMAL;
+			}
+		}
+		else
+		{
+			errAcq += 2 ^ 1;
+		}
 
-			// Delay
-			if (i == 3)
+		// Delay
+		if (readConfig(config, "DELAY=", buffer) == 0)
+		{
+			try
 			{
-				if (isCfgToken(buffer, "DELAY"))
-				{
-					try
-					{
-						delay = std::stol(buffer);
-					}
-					catch (const std::exception&)
-					{
-						delay = 0;
-					}
-				}
-				else
-				{
-					errAcq += 2 ^ i;
-				}
+				delay = std::stol(buffer);
 			}
+			catch (const std::exception&)
+			{
+				delay = 0;
+			}
+		}
+		else
+		{
+			errAcq += 2 ^ 2;
+		}
 
-			// App base path
-			if (i == 4)
-			{
-				if (isCfgToken(buffer, "PATH"))
-				{
-					basePath = new std::filesystem::path(buffer);
-				}
-				else
-				{
-					errAcq += 2 ^ i;
-				}
-			}
+		// App base path
+		if (readConfig(config, "PATH=", buffer) == 0)
+		{
+			basePath = new std::filesystem::path(buffer);
+		}
+		else
+		{
+			errAcq += 2 ^ 3;
+		}
 
-			// App executable
-			if (i == 5)
-			{
-				if (isCfgToken(buffer, "EXE"))
-				{
-					execName = buffer;
-				}
-				else
-				{
-					errAcq += 2 ^ i;
-				}
-			}
+		// App executable
+		if (readConfig(config, "EXE=", buffer) == 0)
+		{
+			execName = buffer;
+		}
+		else
+		{
+			errAcq += 2 ^ 4;
+		}
 
-			// App args
-			if (i == 6)
-			{
-				if (isCfgToken(buffer, "ARGS"))
-				{
-					args = buffer;
-				}
-				else
-				{
-					errAcq += 2 ^ i;
-				}
-			}
+		// App args
+		if (readConfig(config, "ARGS=", buffer) == 0)
+		{
+			args = buffer;
+		}
+		else
+		{
+			errAcq += 2 ^ 5;
+		}
 
-			// Time to open
-			if (i == 7)
-			{
-				if (isCfgToken(buffer, "TIME_HISTORY"))
-				{
-					getTimeHistory(buffer, time2OpenHistory, errAcqTimeHistory);
-				}
-				else
-				{
-					errAcq += 2 ^ i;
-				}
-			}
+		// Time to open
+		if (readConfig(config, "TIME_HISTORY=", buffer) == 0)
+		{
+			getTimeHistory(buffer, time2OpenHistory, errAcqTimeHistory);
+		}
+		else
+		{
+			errAcq += 2 ^ 6;
 		}
 
 		config.close();
@@ -292,7 +267,7 @@ initApp* loadAppConfig(std::filesystem::path initDataCfgFile)
 
 		return initTemp;
 	}
-	catch (const std::exception& e)
+	catch (const std::exception&)
 	{
 		return nullptr;
 	}
@@ -318,94 +293,76 @@ initProtocol* loadProtocolConfig(std::filesystem::path initDataCfgFile)
 		long delay = 0;
 		std::vector<long long> time2OpenHistory;
 
-		int i = 0;
-
-		while (std::getline(config, buffer))
+		// Show name
+		if (readConfig(config, "NAME=", buffer) == 0)
 		{
-			// Show name
-			if (i == 1)
-			{
-				if (isCfgToken(buffer, "NAME"))
-				{
-					name = buffer;
-				}
-				else
-				{
-					errAcq += 2 ^ i;
-				}
-			}
+			name = buffer;
+		}
+		else
+		{
+			errAcq += 2 ^ 0;
+		}
 
-			// Priority
-			if (i == 2)
+		// Priority
+		if (readConfig(config, "PRIORITY=", buffer) == 0)
+		{
+			if (std::strcmp(buffer.c_str(), "LOW") == 0)
 			{
-				if (isCfgToken(buffer, "PRIORITY"))
-				{
-					if (std::strcmp(buffer.c_str(), "LOW") == 0)
-					{
-						priority = Priority_t::LOW;
-					}
-					else if (std::strcmp(buffer.c_str(), "NORMAL") == 0)
-					{
-						priority = Priority_t::NORMAL;
-					}
-					else if (std::strcmp(buffer.c_str(), "HIGH") == 0)
-					{
-						priority = Priority_t::HIGH;
-					}
-					else
-					{
-						priority = Priority_t::NORMAL;
-					}
-				}
-				else
-				{
-					errAcq += 2 ^ i;
-				}
+				priority = Priority_t::LOW;
 			}
-
-			// Delay
-			if (i == 3)
+			else if (std::strcmp(buffer.c_str(), "NORMAL") == 0)
 			{
-				if (isCfgToken(buffer, "DELAY"))
-				{
-					try
-					{
-						delay = std::stol(buffer);
-					}
-					catch (const std::exception&)
-					{
-						delay = 0;
-					}
-				}
-				else
-				{
-					errAcq += 2 ^ i;
-				}
+				priority = Priority_t::NORMAL;
 			}
-
-			// Protocol name
-			if (i == 4)
+			else if (std::strcmp(buffer.c_str(), "HIGH") == 0)
 			{
-				if (isCfgToken(buffer, "PROTOCOL"))
-				{
-					protocolName = buffer;
-				}
+				priority = Priority_t::HIGH;
 			}
-
-			// Time to open
-			if (i == 5)
+			else
 			{
-				if (isCfgToken(buffer, "TIME_HISTORY"))
-				{
-					getTimeHistory(buffer, time2OpenHistory, errAcqTimeHistory);
-				}
-				else
-				{
-					errAcq += 2 ^ i;
-				}
+				priority = Priority_t::NORMAL;
 			}
+		}
+		else
+		{
+			errAcq += 2 ^ 1;
+		}
 
-			i++;
+		// Delay
+		if (readConfig(config, "DELAY=", buffer) == 0)
+		{
+			try
+			{
+				delay = std::stol(buffer);
+			}
+			catch (const std::exception&)
+			{
+				delay = 0;
+			}
+		}
+		else
+		{
+			errAcq += 2 ^ 2;
+		}
+
+		// Protocol name
+		if (readConfig(config, "PROTOCOL=", buffer) == 0)
+		{
+			protocolName = buffer;
+		}
+		else
+		{
+			errAcq += 2 ^ 3;
+		}
+
+		// Time to open
+		if (readConfig(config, "TIME_HISTORY=", buffer) == 0)
+		{
+			getTimeHistory(buffer, time2OpenHistory, errAcqTimeHistory);
+		}
+		else
+		{
+			errAcq += 2 ^ 4;
 		}
 
 		config.close();
@@ -423,26 +380,6 @@ initProtocol* loadProtocolConfig(std::filesystem::path initDataCfgFile)
 	{
 		return nullptr;
 	}
-}
-
-bool isCfgToken(std::string& configStr, const char* configToken)
-{
-	std::string temp = configStr;
-
-	char* token = const_cast<char*>(configToken);
-
-	std::strcpy(token, "=");
-
-	if (temp._Starts_with(configToken))
-	{
-		temp.replace(0, std::strlen(token), "");
-
-		configStr = temp;
-
-		return true;
-	}
-
-	return false;
 }
 
 void getTimeHistory(std::string& strData, std::vector<long long>& timeHistory, int& errAcq)
@@ -493,12 +430,14 @@ int chkProfile(std::string& loadProfile, std::filesystem::path& profileCfgPath)
 				// If the profile folder exist
 				if (std::filesystem::exists(loadProfilePath))
 				{
-					std::string profileConfigFile = appDataPath + "\\" + "profile.cfg";
+					std::filesystem::path profileConfigFile = loadProfilePath.generic_string() + "\\profile.cfg";
 			
 					// Check if the profile config file exist
-					if (std::filesystem::exists(loadProfilePath))
+					if (std::filesystem::exists(profileConfigFile))
 					{
-						std::ofstream fs(profileConfigFile);
+						std::fstream fs;
+
+						fs.open(profileConfigFile, std::ios::in);
 
 						// Try to reach the file
 						if (fs.is_open())
