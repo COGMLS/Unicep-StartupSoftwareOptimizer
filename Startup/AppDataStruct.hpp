@@ -6,9 +6,15 @@
 #include <string>
 #include <vector>
 #include <chrono>
+#include <thread>
 #include <filesystem>
+#include <Windows.h>
+
+#define GLOBAL_WAITINPUTIDLE 60000
+#define MAX_TIME2OPENHISTORY_ENTRIES 30
 
 extern const std::string BASE_APPDATA_DIR;
+
 
 enum Priority_t
 {
@@ -39,7 +45,7 @@ class initApp: public initData
 		std::filesystem::path basePath;
 		std::string execName;
 		std::string args;
-		std::chrono::high_resolution_clock::time_point time2Open;
+		long long time2Open;
 		std::vector<long long>time2OpenHistory;
 	public:
 		initApp(std::string showName, std::filesystem::path basePath, std::string execName, std::string args, Priority_t priority, long delay, std::vector<long long>time2OpenHistory);
@@ -55,7 +61,7 @@ class initProtocol: public initData
 {
 	private:
 		std::string protocolName;
-		std::chrono::high_resolution_clock::time_point time2Open;
+		long long time2Open;
 		std::vector<long long>time2OpenHistory;
 	public:
 		initProtocol(std::string showName, std::string protocolName, Priority_t priority, long delay, std::vector<long long>time2OpenHistory);
