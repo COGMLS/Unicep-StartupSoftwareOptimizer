@@ -112,13 +112,11 @@ std::string Profile::getDescription()
 
 initApp const& Profile::getApp()
 {
-	// TODO: insert return statement here
 	return this->appQueue->top();
 }
 
 initProtocol const& Profile::getProtocol()
 {
-	// TODO: insert return statement here
 	return this->protocolQueue->top();
 }
 
@@ -467,4 +465,14 @@ int chkProfile(std::string& loadProfile, std::filesystem::path& profileCfgPath)
 	}
 
 	return 1;	// Fail to get the environment variable
+}
+
+void Profile::remAppQueue()
+{
+	this->appQueue->pop();
+}
+
+void Profile::remProtocolQueue()
+{
+	this->protocolQueue->pop();
 }

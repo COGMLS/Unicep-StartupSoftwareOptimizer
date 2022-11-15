@@ -29,6 +29,8 @@ class Profile
 		initProtocol const& getProtocol();
 		void add2Queue(initApp app);
 		void add2Queue(initProtocol protocol);
+		void remAppQueue();
+		void remProtocolQueue();
 		size_t appQueueSize();
 		size_t protocolQueueSize();
 };
