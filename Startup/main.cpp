@@ -16,6 +16,7 @@
 // ISO C++ Headers:
 #include <iostream>
 #include <locale>
+#include <filesystem>
 
 // Windows Headers:
 
@@ -23,7 +24,7 @@
 #include "CmdLine.hpp"
 #include "CustomMessages.hpp"
 #include "Loader.hpp"
-
+#include "AppControls.hpp"
 
 int main(int argc, const char* argv[])
 {
@@ -80,11 +81,116 @@ int main(int argc, const char* argv[])
 
     msg::showPresentation("Startup Software Optimizer");
 
-    std::string loadPath;
+    std::string profileName;
 
-    if (chkLoadPathValue(argc, argv, loadPath)) // Change function to get the profile name directly
+    if (chkLoadProfile(argc, argv, profileName)) // Change function to get the profile name directly
     {
-        // Test loadPath
+        // Test profile
+        std::filesystem::path profilePath;
+
+        int chkProfileStatus = chkProfile(profileName, profilePath);
+        if (chkProfileStatus == 0)
+        {
+            std::cout << msg::writeInfo("Loading profile " + profileName + "...") << std::endl;
+
+            Profile* profile = nullptr;
+
+            try
+            {
+                profile = new Profile(profilePath);
+                std::vector<std::thread*> threadsV;
+                unsigned int maxThreads = 2;
+
+                std::cout << msg::writeSuccess("Profile " + profile->getName() + " loaded!") << std::endl;
+                std::cout << msg::writeInfo("Loading " + std::to_string(profile->protocolQueueSize() + profile->appQueueSize()) + " applications...") << std::endl;
+
+                makeThreads(threadsV, maxThreads);
+
+                // Create the threads for create the process
+                if (threadsV.size() > 0)
+                {
+                    int i = 0;
+                    bool initA = true;
+                    int errAcq = 0;
+                    while (profile->protocolQueueSize() + profile->appQueueSize() > 0)
+                    {
+                        if (errAcq > 0)
+                        {
+                            return 6;   // Error founded
+                        }
+
+                        if (i > maxThreads)
+                        {
+                            i = 0;      // Recycle the threadV index
+                        }
+                        
+                        if (initA)
+                        {
+                            int thrResult = prepareThread(threadsV[i], profile->getApp());
+
+                            if (thrResult == 0)
+                            {
+                                profile->remAppQueue();
+                            }
+                            else if (thrResult != 2 && thrResult != 0)
+                            {
+                                profile->remAppQueue();
+                            }
+                            else
+                            {
+                                errAcq++;
+                            }
+
+                            if (profile->protocolQueueSize() > 0)
+                            {
+                                initA = false;
+                            }
+                        }
+                        else
+                        {
+                            int thrResult = prepareThread(threadsV[i], profile->getProtocol());
+
+                            if (thrResult == 0)
+                            {
+                                profile->remProtocolQueue();
+                            }
+                            else if (thrResult != 2 && thrResult != 0)
+                            {
+                                profile->remProtocolQueue();
+                            }
+                            else
+                            {
+                                errAcq++;
+                            }
+
+                            if (profile->appQueueSize() > 0)
+                            {
+                                initA = true;
+                            }
+                        }
+
+                        i++;
+                    }
+                }
+                else
+                {
+                    return 5;   // Fail to create the thread pointers
+                }
+            }
+            catch (const std::exception& e)
+            {
+                std::cout << "Fail to load the profile!" << std::endl;
+                std::cerr << e.what() << std::endl;
+
+                return 4;   // Fail to load the profile
+            }
+        }
+        else
+        {
+            std::cout << msg::writeError("Fail to get the profile " + profileName + ". Error code: " + std::to_string(chkProfileStatus)) << std::endl;
+
+            return 3;   // Fail to get the profile from command line
+        }
     }
 
     return 0;
